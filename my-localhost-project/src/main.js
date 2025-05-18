@@ -1,14 +1,18 @@
-// Validación de formulario de contacto
-const contactForm = document.getElementById('contactForm');
-const formMsg = document.getElementById('formMsg');
+document.addEventListener('DOMContentLoaded', () => {
+  const contactForm = document.getElementById('contactForm');
+  const formMsg = document.getElementById('formMsg');
 
-if (contactForm) {
-  contactForm.addEventListener('submit', function (e) {
+  contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
+
     let valid = true;
 
-    // Validación de nombre
     const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const message = document.getElementById('message');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validar nombre
     if (!name.value.trim()) {
       name.classList.add('is-invalid');
       valid = false;
@@ -16,9 +20,7 @@ if (contactForm) {
       name.classList.remove('is-invalid');
     }
 
-    // Validación de email
-    const email = document.getElementById('email');
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Validar email
     if (!email.value.trim() || !emailPattern.test(email.value)) {
       email.classList.add('is-invalid');
       valid = false;
@@ -26,8 +28,7 @@ if (contactForm) {
       email.classList.remove('is-invalid');
     }
 
-    // Validación de mensaje
-    const message = document.getElementById('message');
+    // Validar mensaje
     if (!message.value.trim()) {
       message.classList.add('is-invalid');
       valid = false;
@@ -36,16 +37,21 @@ if (contactForm) {
     }
 
     if (valid) {
-      formMsg.textContent = '¡Mensaje enviado correctamente!';
-      formMsg.className = 'alert alert-success';
       contactForm.reset();
+      formMsg.textContent = '';
+      formMsg.className = '';
+
+      // Mostrar modal de éxito usando Bootstrap 5
+      const successModal = new bootstrap.Modal(document.getElementById('formSuccessModal'));
+      successModal.show();
+
     } else {
       formMsg.textContent = 'Por favor corrige los errores antes de enviar.';
-      formMsg.className = 'alert alert-danger';
+      formMsg.className = 'alert alert-danger mt-2';
     }
   });
 
-  // Validación en tiempo real
+  // Remover clase de error al escribir
   ['name', 'email', 'message'].forEach(id => {
     const input = document.getElementById(id);
     input.addEventListener('input', () => {
@@ -54,4 +60,4 @@ if (contactForm) {
       formMsg.className = '';
     });
   });
-}
+});
